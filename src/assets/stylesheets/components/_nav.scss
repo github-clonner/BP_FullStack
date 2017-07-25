@@ -1,0 +1,37 @@
+.navbar-nav > li > .dropdown-menu {
+  background-color:rgba(255,255,255, 0.3); 
+  z-index:3;
+  width:100%;
+  border-radius: 0 0 5% 5%;
+}
+
+.navbar-default {
+  background-color: transparent;
+  .navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    &:hover {
+      color: $color-primary;
+    }
+  }
+}
+
+.navbar {
+  padding-top:2px;
+  border: none;
+}
+
+#navbar li a {
+ color: white;
+}
+
+.navbar-right .dropdown .dropdown-menu > li > a:hover, .navbar-right .dropdown .dropdown-menu > li > a:focus{
+  background-color:rgba(0, 0, 0, 0.5); 
+}
+
+.navbar-default .navbar-nav > .open > a
+, .navbar-default .navbar-nav > .open > a:hover,
+ .navbar-default .navbar-nav > .open > a:focus {
+  background:transparent;
+}

@@ -1,39 +1,42 @@
 import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
-import * as actions from '../../actions'
-import { NavLink } from 'react-router-dom'
-import Messages from '../pages/auth_messages'
 import Helmet from 'react-helmet'
+import { NavLink } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import * as actions from '../../actions'
+import Messages from '../pages/auth_messages'
 
 class Signup extends Component {
+
+  constructor(props) {
+    super(props)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
+  }
+
+  componentWillUnmount() {
+    this.props.clearMessages()
+  }
 
   handleFormSubmit(formProps) {
     this.props.signupUser(formProps)
   }
 
-  componentWillUnmount(){
-    this.props.clearMessages()
-  }
-
-  renderAlert() {
-    if (this.props.errorMessage) {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {this.props.errorMessage}
-        </div>
-      );
-    }
-  }
-
-  renderInput (field) {
+  // eslint-disable-next-line
+  renderInput(field) {
     return (
       <div>
-        <input {...field.input} className={field.className} placeholder={field.placeholder} type={field.type} value={field.input.value}/>
+        <input
+          {...field.input}
+          className={field.className}
+          placeholder={field.placeholder}
+          type={field.type}
+          value={field.input.value}
+        />
         { field.meta.touched && field.meta.error &&
         <span className="error">&#9888;{field.meta.error}</span> }
       </div>
-    );
+    )
   }
 
   render() {
@@ -46,12 +49,12 @@ class Signup extends Component {
           title={title}
           meta={[
             { name: 'description', content: 'Sign up' },
-            { property: 'og:title', content: title },
+            { property: 'og:title', content: title }
           ]}
         />
         <div className="panel">
           <div className="panel-body">
-            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+            <form onSubmit={handleSubmit(this.handleFormSubmit)}>
               <div className="text-center auth-top">
                 Sign up
               </div>
@@ -108,7 +111,7 @@ class Signup extends Component {
                 </fieldset>
                 <br />
                 <button action="submit" className="btn btn-success btn-signup">Create my account </button>
-                <br />                
+                <br />
                 <div className="form-group">
                   <small className="text-muted">By signing up, you agree to the <NavLink to="/tos" exact>Terms of Service</NavLink>.</small>
                 </div>
@@ -116,18 +119,37 @@ class Signup extends Component {
                   <small className="text-muted">Already have an account? <NavLink to="/signin" exact>Sign in</NavLink></small>
                 </div>
               </div>
-            <Messages messages={this.props.messages} />
+              <Messages messages={this.props.messages} />
             </form>
             <br />
           </div>
         </div>
       </div>
-    );
+    )
+  }
+}
+
+Signup.propTypes = {
+  signupUser: PropTypes.func.isRequired,
+  clearMessages: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  messages: PropTypes.shape({
+    success: PropTypes.array,
+    failure: PropTypes.array,
+    info: PropTypes.array
+  })
+}
+
+Signup.defaultProps = {
+  messages: {
+    success: [],
+    failure: [],
+    info: []
   }
 }
 
 function validate(formProps) {
-  const errors = {};
+  const errors = {}
 
   if (!formProps.email) {
     errors.email = 'Please enter an Email'
@@ -137,26 +159,26 @@ function validate(formProps) {
   }
 
   if (!formProps.password) {
-    errors.password = 'Please enter a password';
+    errors.password = 'Please enter a password'
   }
   else if (formProps.password.length < 8) {
     errors.password = 'Please create a password longer than 8 characters'
   }
   else if (!formProps.passwordConfirm) {
-    errors.passwordConfirm = 'Please confirm your password';
+    errors.passwordConfirm = 'Please confirm your password'
   }
   else if (formProps.password !== formProps.passwordConfirm) {
-    errors.password = 'Passwords must match';
+    errors.password = 'Passwords must match'
   }
-  return errors;
+  return errors
 }
 
 function mapStateToProps(state) {
-  return { errorMessage: state.auth.error, messages: state.messages };
+  return { errorMessage: state.auth.error, messages: state.messages }
 }
 
 
 export default reduxForm({
   form: 'signup',
   validate
-})(connect(mapStateToProps, actions)(Signup));
+})(connect(mapStateToProps, actions)(Signup))

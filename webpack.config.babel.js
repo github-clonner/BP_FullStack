@@ -16,7 +16,7 @@ export default {
   entry: [
     'react-hot-loader/patch',
     'bootstrap-loader?bootstrapPath=./node_modules/bootstrap-sass',
-    './src/client',
+    './src/client'
   ],
   output: {
     filename: 'js/bundle.js',
@@ -26,8 +26,8 @@ export default {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      images: path.resolve(__dirname, 'src/assets/images'),
-    },
+      images: path.resolve(__dirname, 'src/assets/images')
+    }
   },
   module: {
     rules: [

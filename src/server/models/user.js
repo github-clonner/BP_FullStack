@@ -1,7 +1,6 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt-nodejs')
-const NORMAL = require('../members').NORMAL
-const PREMIUM = require('../members').PREMIUM
+import mongoose from 'mongoose'
+import bcrypt from 'bcrypt-nodejs'
+import { NORMAL, PREMIUM } from '../members'
 
 const Schema = mongoose.Schema
 
@@ -18,7 +17,7 @@ const userSchema = new Schema({
   },
   profile: {
     firstName: { type: String },
-    lastName: { type: String },
+    lastName: { type: String }
   },
   account: {
     type: String,
@@ -34,40 +33,43 @@ const userSchema = new Schema({
   },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date }
-});
+})
 
+// eslint-disable-next-line        
 userSchema.pre('save', function (next) {
-
-  const user = this;
-  // return if not modified
+  const user = this
   if (!user.isModified('password')) {
-    return next();
+    return next()
   }
   // bcrypt.genSalt(rounds, cb)
+  // eslint-disable-next-line
   bcrypt.genSalt(10, function (err, salt) {
     if (err) {
-      return next(err);
+      return next(err)
     }
     // bcrypt.hash(data, salt, progress, cb)
+    // eslint-disable-next-line
     bcrypt.hash(user.password, salt, null, function (hashErr, hash) {
       if (hashErr) {
-        return next(hashErr);
+        return next(hashErr)
       }
-      user.password = hash;
-      next();
-    });
-  });
-});
+      user.password = hash
+      next()
+    })
+  })
+})
 
+// eslint-disable-next-line        
 userSchema.methods.comparePassword = function (candidatePassword, callback) {
+  // eslint-disable-next-line        
   bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
     if (err) {
-      return callback(err);
+      return callback(err)
     }
-    callback(null, isMatch);
-  });
-};
+    callback(null, isMatch)
+  })
+}
 
-const ModelClass = mongoose.model('chickens', userSchema);
+const ModelClass = mongoose.model('chickens', userSchema)
 
-module.exports = ModelClass;
+module.exports = ModelClass

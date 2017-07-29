@@ -1,22 +1,29 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
+import PropTypes from 'prop-types'
+import { NavLink } from 'react-router-dom'
 import { reduxForm, Field } from 'redux-form'
 import * as actions from '../../actions/index'
 import Messages from '../pages/auth_messages'
-import { NavLink } from 'react-router-dom'
 
 class Account extends Component {
+
+  constructor(props) {
+    super(props)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
+  }
 
   componentWillUnmount() {
     this.props.clearMessages()
   }
 
-  handleFormSubmit({account: {profile: {firstName}}, account: {profile: {lastName}}}) {
+  handleFormSubmit({ account: { profile: { firstName } }, account: { profile: { lastName } } }) {
     this.props.updateProfile({ firstName, lastName })
   }
 
-  renderInput (field) {
+  // eslint-disable-next-line
+  renderInput(field) {
     return (
       <div>
         <input {...field.input} className={field.className} type={field.type} />
@@ -35,12 +42,12 @@ class Account extends Component {
           title={title}
           meta={[
             { name: 'description', content: 'Account' },
-            { property: 'og:title', content: title },
+            { property: 'og:title', content: title }
           ]}
         />
         <div className="panel">
           <div className="panel-body">
-            <form className="form-horizontal" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+            <form className="form-horizontal" onSubmit={handleSubmit(this.handleFormSubmit)}>
               <div className="text-center auth-top">
                 Account Information
               </div>
@@ -104,28 +111,63 @@ class Account extends Component {
   }
 }
 
+Account.propTypes = {
+  updateProfile: PropTypes.func.isRequired,
+  clearMessages: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  account: PropTypes.shape({
+    email: PropTypes.string,
+    account: PropTypes.string,
+    profile: PropTypes.shape({
+      firstName: PropTypes.string,
+      lastName: PropTypes.string
+    })
+  }),
+  messages: PropTypes.shape({
+    success: PropTypes.array,
+    failure: PropTypes.array,
+    info: PropTypes.array
+  })
+}
+
+Account.defaultProps = {
+  messages: {
+    success: [],
+    failure: [],
+    info: []
+  },
+  account: {
+    account: '',
+    email: '',
+    profile: {
+      firstName: '',
+      lastName: ''
+    }
+  }
+}
+
 function validate(formProps) {
-  const errors = {account: {profile: {firstName: '', lastName: ''}}}
+  const errors = { account: { profile: { firstName: '', lastName: '' } } }
   if (!formProps.account.profile.firstName) {
-    errors.account.profile.firstName = 'Please enter a first name';
+    errors.account.profile.firstName = 'Please enter a first name'
   }
   if (!formProps.account.profile.lastName) {
-    errors.account.profile.lastName = 'Please enter a last name';
+    errors.account.profile.lastName = 'Please enter a last name'
   }
-  return errors;
+  return errors
 }
 
 function mapStateToProps(state, ownProps) {
   return {
     initialValues: {
-      account: ownProps.account,
+      account: ownProps.account
     },
-    messages: state.messages, 
+    messages: state.messages
   }
 }
 
 export default connect(mapStateToProps, actions)(reduxForm({
   form: 'account',
   enableReinitialize: true,
-  validate,
+  validate
 }, mapStateToProps)(Account))

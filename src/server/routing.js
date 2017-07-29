@@ -1,17 +1,14 @@
 // @flow
 import passport from 'passport'
-import { ExtractJwt } from 'passport-jwt'
-
+import renderApp from './render-app'
 import Authentication from './controllers/auth_controller'
+// eslint-disable-next-line
 import passportService from './services/passport'
-
-const requireAuth = passport.authenticate('jwt', { session: false })
-const requireSignin = passport.authenticate('local', { session: false })
 
 import {
   homePage,
   features,
-  secretPage,
+  secretPage
 } from './controller'
 
 import {
@@ -22,13 +19,13 @@ import {
   UPDATE_PROFILE,
   RESET_PASSWORD,
   FORGOT_PASSWORD,
-  FEATURES,
+  FEATURES
 } from '../shared/routes'
 
-import renderApp from './render-app'
+const requireAuth = passport.authenticate('jwt', { session: false })
+const requireSignin = passport.authenticate('local', { session: false })
 
 export default (app: Object) => {
-
   // Auth
   app.post(SIGN_IN, requireSignin, Authentication.signin)
   app.post(SIGN_UP, Authentication.signup)
@@ -40,25 +37,13 @@ export default (app: Object) => {
     res.send(renderApp(req.url, homePage()))
   })
 
-  // app.get(HELLO_PAGE_ROUTE, (req, res) => {
-  //   res.send(renderApp(req.url, helloPage()))
-  // })
-
   app.get(FEATURES, (req, res) => {
     res.send(renderApp(req.url, features()))
   })
-  
+
   app.get(SECRET_PAGE, requireAuth, (req, res) => {
     res.send(renderApp(req.url, secretPage()))
   })
-
-  // app.get(HELLO_ASYNC_PAGE_ROUTE, (req, res) => {
-  //   res.send(renderApp(req.url, helloAsyncPage()))
-  // })
-
-  // app.get(helloEndpointRoute(), (req, res) => {
-  //   res.json(helloEndpoint(req.params.num))
-  // })
 
   app.get('*', (req, res) => {
     res.status(404).send(renderApp(req.url))

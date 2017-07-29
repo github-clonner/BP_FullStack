@@ -1,12 +1,12 @@
 import {
   SIGNIN_SUCCESS,
   SIGN_OUT,
-  UPDATED_PROFILE,
+  UPDATED_PROFILE
 } from '../actions/types'
 
 const initialState = {
   authenticated: false,
-  account: {},
+  account: {}
 }
 
 export default function (state = initialState, action) {
@@ -17,6 +17,7 @@ export default function (state = initialState, action) {
       return { ...state, authenticated: false }
     case UPDATED_PROFILE:
       return { ...state, account: action.payload }
+    default:
+      return state
   }
-  return state
 }

@@ -1,25 +1,30 @@
-// @flow
 
 import {
   AUTH_FAILURE,
   AUTH_ATTEMPT,
   AUTH_SUCCESS,
-  CLEAR_MESSAGES,
+  CLEAR_MESSAGES
 } from '../actions/types'
+
+// type State = {
+//   error: Array,
+//   success: Array,
+//   info: Array
+// }
 
 const messagesReducer = (state = {}, action) => {
   switch (action.type) {
     case AUTH_FAILURE:
       return {
-        error: action.payload,
+        error: action.payload
       }
     case AUTH_SUCCESS:
       return {
-        success: action.payload,
+        success: action.payload
       }
     case AUTH_ATTEMPT:
       return {
-        info: action.payload,
+        info: action.payload
       }
     case CLEAR_MESSAGES:
       return {}

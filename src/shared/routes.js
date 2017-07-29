@@ -10,5 +10,3 @@ export const SECRET_PAGE = '/secretpage'
 export const ACCOUNT_PAGE = '/account'
 export const UPDATE_PROFILE = '/update_profile'
 export const FEATURES = '/features'
-
-// export const helloEndpointRoute = (num: ?number) => `/ajax/hello/${num || ':num'}`

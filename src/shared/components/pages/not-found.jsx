@@ -17,10 +17,10 @@ const NotFoundPage = () =>
     <div className="container">
       <div className="row">
         <div className="jumbotron">
-           <br />
-           <br />
-           <br />
-           <h1>Oops! Couldn't find that page for you!</h1>
+          <br />
+          <br />
+          <br />
+          <h1>Oops! Couldn&apos;t find that page for you!</h1>
         </div>
       </div>
     </div>

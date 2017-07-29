@@ -1,4 +1,7 @@
-import React from 'react';
+/* eslint-disable */
+
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class Messages extends React.Component {
   render() {
@@ -14,8 +17,25 @@ class Messages extends React.Component {
       <div role="alert" className="alert alert-info">
         {this.props.messages.info.map((message, index) => <div key={index}>{message.info}</div>)}
       </div>
-    ) : null;
+    ) : null
   }
 }
 
-export default Messages;
+Messages.propTypes = {
+  messages: PropTypes.shape({
+    success: PropTypes.array,
+    info: PropTypes.array,
+    failure: PropTypes.array
+  })
+}
+
+Messages.defaultProps = {
+  messages: {
+    success: [],
+    info: [],
+    failure: []
+  }
+}
+
+export default Messages
+

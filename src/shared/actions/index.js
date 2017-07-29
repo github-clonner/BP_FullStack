@@ -3,9 +3,8 @@ import { createAction } from 'redux-actions'
 import { push } from 'react-router-redux'
 
 import {
-  CLEAR_MESSAGES, SIGNIN_SUCCESS, SIGN_OUT,
-  AUTH_SUCCESS, UPDATED_PROFILE,
-  AUTH_ATTEMPT, AUTH_FAILURE,
+  CLEAR_MESSAGES, SIGNIN_SUCCESS, SIGN_OUT, UPDATED_PROFILE,
+  AUTH_ATTEMPT, AUTH_FAILURE, AUTH_SUCCESS
 } from './types'
 
 import { APP_NAME } from '../config'
@@ -16,8 +15,8 @@ export const signOut = createAction(SIGN_OUT)
 export const updatedProfile = createAction(UPDATED_PROFILE)
 export const authAttempt = createAction(AUTH_ATTEMPT)
 export const authFailure = createAction(AUTH_FAILURE)
-export const authSuccess = createAction(AUTH_SUCCESS)
 export const clearMessages = createAction(CLEAR_MESSAGES)
+export const authSuccess = createAction(AUTH_SUCCESS)
 
 export function resetPassword({ newPassword, token }) {
   return (dispatch) => {
@@ -26,9 +25,9 @@ export function resetPassword({ newPassword, token }) {
     return fetch(RESET_PASSWORD, {
       method: 'post',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ newPassword, token }),
+      body: JSON.stringify({ newPassword, token })
     })
     .then((response) => {
       if (response.ok) {
@@ -53,9 +52,9 @@ export function forgotPassword({ email }) {
     return fetch(FORGOT_PASSWORD, {
       method: 'post',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email })
     })
     .then((response) => {
       if (response.ok) {
@@ -81,9 +80,9 @@ export function updateProfile({ firstName, lastName }) {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        authorization: localStorage.getItem(APP_NAME),
+        authorization: localStorage.getItem(APP_NAME)
       },
-      body: JSON.stringify({ firstName, lastName }),
+      body: JSON.stringify({ firstName, lastName })
     })
     .then((response) => {
       if (response.ok) {
@@ -109,7 +108,7 @@ export function signinUser({ email, password }) {
     return fetch(SIGN_IN, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password })
     })
     .then((response) => {
       if (response.ok) {
@@ -135,11 +134,11 @@ export function signOutUser() {
 export function signupUser({ email, firstName, lastName, password }) {
   return (dispatch) => {
     dispatch(clearMessages())
-    dispatch(authAttempt([{ info: 'Attempting to sign you in' }]))
+    dispatch(authAttempt([{ info: 'Attempting to sign you up' }]))
     return fetch(SIGN_UP, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, firstName, lastName, password }),
+      body: JSON.stringify({ email, firstName, lastName, password })
     })
     .then((response) => {
       if (response.ok) {

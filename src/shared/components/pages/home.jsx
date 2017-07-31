@@ -9,6 +9,7 @@ const HomePage = () => (
           <div className="intro-lead-in">{APP_NAME}</div>
           <br />
           <div className="intro-heading">よう皆</div>
+          <div className="photo-credit"><span>📷</span> &nbsp; <a target="_blank" href="https://unsplash.com/@madebyvadim">credit: @madebyvadim</a></div>
         </div>
       </div>
     </section>

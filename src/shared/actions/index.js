@@ -150,10 +150,10 @@ export function signupUser({ email, firstName, lastName, password }) {
       }
       else if (response.status === 422) {
         return response.json().then((json) => {
-          dispatch(authFailure([{ error: json.error }]))
+          dispatch(authFailure([{ error: json.info }]))
         })
       }
-      return dispatch(authFailure([{ error: 'Oops! We couldn\'t find a match with your password' }]))
+      return dispatch(authFailure([{ error: 'Oops! Something went wrong! We\'re working on a solution.' }]))
     })
   }
 }

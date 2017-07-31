@@ -1,68 +1,78 @@
 #home {
-  .intro-text {
-    text-align:center;
-    padding-top: 100px;
-    padding-bottom: 50px;
-  }
-  .square {
-    text-align: center;
-  }
-  .heading {
-    text-align: center;
-  }
-  .cover {
-    height:90vh;
-  }
-  .intro-text .intro-lead-in {
-    color: $color-primary;
-    text-transform:uppercase;
-    text-align:center;
-    font-style: italic;
-    font-size: 22px;
-    line-height: 22px;
-    margin-bottom: 25px;
-  }
-  .intro-text .intro-heading {
-    text-transform: uppercase;
-    font-weight: 700;
-    color:white;
-    font-size: 84px;
-    line-height: 50px;
-    margin-bottom: 25px;
-  }
-  .fa-soundcloud{
-    color:#ff3300;
-  }
-
-  .fa-check-circle{
-    color:rgba(19, 128, 36, 1);
-  }
-
-  .fa-amazon{
-    color:#ff9900;
-  }
-  
-  #home-items{
-    padding: 10vh 0;
-    height: 100%;
-    background-color:white;
-  }
-
-  .fa-cc-stripe{
-    color:#00afe1;
-  }
-
-  .jumbotron{
-    background-color:transparent;
-    padding-bottom:0px;
-    padding-top:0px;
-  }
-
-  .square i {
-    text-align: center;
-    margin-top: 5rem;
-    margin-bottom: 1rem;
-  }
+    .photo-credit {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background:black;
+        padding: 0px 6px;
+        font-size: 14px;
+        border-radius: 4px;
+        span {
+             vertical-align: middle;
+             line-height:2;
+        }
+    }
+    a {
+        margin-bottom: 2px;
+        color: white;
+    }
+    .intro-text {
+        text-align: center;
+        padding-top: 100px;
+        padding-bottom: 50px;
+    }
+    .square {
+        text-align: center;
+    }
+    .heading {
+        text-align: center;
+    }
+    .cover {
+        height: 90vh;
+        position: relative;
+    }
+    .intro-text .intro-lead-in {
+        color: $color-primary;
+        text-transform: uppercase;
+        text-align: center;
+        font-style: italic;
+        font-size: 22px;
+        line-height: 22px;
+        margin-bottom: 25px;
+    }
+    .intro-text .intro-heading {
+        text-transform: uppercase;
+        font-weight: 700;
+        color: white;
+        font-size: 84px;
+        line-height: 50px;
+        margin-bottom: 25px;
+    }
+    .fa-soundcloud {
+        color: #ff3300;
+    }
+    .fa-check-circle {
+        color: rgba(19, 128, 36, 1);
+    }
+    .fa-amazon {
+        color: #ff9900;
+    }
+    #home-items {
+        padding: 10vh 0;
+        height: 100%;
+        background-color: white;
+    }
+    .fa-cc-stripe {
+        color: #00afe1;
+    }
+    .jumbotron {
+        background-color: transparent;
+        padding-bottom: 0px;
+        padding-top: 0px;
+    }
+    .square i {
+        text-align: center;
+        margin-top: 5rem;
+        margin-bottom: 1rem;
+    }
 }
-
-

@@ -1,14 +1,16 @@
 #account {
-   text-overflow: ellipsis; 
-  .form-group {
-    width:80%;
-  }
-  .auth-flexcontainer-account{
-    color:white;
-  }
-  .btn-account{
-    margin:          10px 0;
-    width:           80%;
-    height:          6vh;
-  }
+    text-overflow: ellipsis;
+    .form-group {
+        width: 80%;
+        overflow-x: hidden;
+    }
+    .auth-flexcontainer-account {
+        color: white;
+    }
+    .btn-account {
+        margin: 10px 0;
+        width: 80%;
+        height: 6vh;
+        overflow-x: hidden;
+    }
 }

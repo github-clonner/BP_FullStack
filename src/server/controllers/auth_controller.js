@@ -167,16 +167,16 @@ exports.signup = (req, res, next) => {
             token: tokenForUser(savedUser),
             primaryinfo: savedUser
           })
-          // handle success email
           // eslint-disable-next-line
-          console.log(response)
+          console.log('MailGun Output: ', response)
+          // handle success email
         })
           // eslint-disable-next-line
         .catch((mailGunErr) => {
           // eslint-disable-next-line
-          // handle email failure.
-          // return res.status(422).json({ info: 'Signed up!
-          // But there was an issue with your email.  Please double check your inbox' })
+          console.log('Mailgun failure: ', mailGunErr)
+          return res.status(422).json({
+            info: 'Signed up! But there was an issue with your email.  Please double check your inbox' })
         })
 
       // res.status(201).json({

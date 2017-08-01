@@ -10,10 +10,9 @@ import thunkMiddleware from 'redux-thunk'
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
 
 import history from './history'
-import { SIGNIN_SUCCESS } from '../shared/actions/types' 
 import App from '../shared/app'
 import reducers from '../shared/reducers'
-import { APP_CONTAINER_SELECTOR, APP_NAME } from '../shared/config'
+import { APP_CONTAINER_SELECTOR } from '../shared/config'
 import { isProd } from '../shared/util'
 
 // // eslint-disable-next-line flow-disable-next-line

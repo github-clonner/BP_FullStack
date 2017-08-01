@@ -150,7 +150,7 @@ export function signupUser({ email, firstName, lastName, password }) {
       }
       else if (response.status === 422) {
         return response.json().then((json) => {
-          dispatch(authFailure([{ error: json.info }]))
+          dispatch(authFailure([{ error: json.error }]))
         })
       }
       return dispatch(authFailure([{ error: 'Oops! Something went wrong! We\'re working on a solution.' }]))

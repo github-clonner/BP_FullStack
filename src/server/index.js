@@ -13,7 +13,7 @@ mongoose.Promise = global.Promise
 mongoose.connect(DATABASE)
 
 const app = express()
-app.use(helmet())
+app.use(helmet()) // default helmet settings
 app.use(bodyParser.json({ type: '*/*' }))
 app.use(bodyParser.urlencoded({ extended: false })) // string or array
 app.use(compression())

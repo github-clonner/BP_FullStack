@@ -57,7 +57,9 @@
     "redux-thunk": "^2.2.0",
     "resolve-url-loader": "^2.1.0",
     "tether": "^1.4.0",
-    "webpack-dev-server": "^2.5.0"
+    "webpack-dev-server": "^2.5.0",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.4.6"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.1",

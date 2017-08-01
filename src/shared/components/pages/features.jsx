@@ -48,7 +48,6 @@ class Features extends Component {
     }
 
     this.openModal = this.openModal.bind(this)
-    this.afterOpenModal = this.afterOpenModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
   }
 
@@ -56,15 +55,10 @@ class Features extends Component {
     modalIsOpen: boolean
   }
   openModal: Function
-  afterOpenModal: Function
   closeModal: Function
 
   openModal() {
     this.setState({ modalIsOpen: true })
-  }
-
-  //eslint-disable-next-line
-  afterOpenModal() {
   }
 
   closeModal() {
@@ -105,7 +99,6 @@ class Features extends Component {
                 <button className="btn btn-success" onClick={this.openModal}>React-Modal</button>
                 <Modal
                   isOpen={this.state.modalIsOpen}
-                  onAfterOpen={this.afterOpenModal}
                   onRequestClose={this.closeModal}
                   style={customStyles}
                   contentLabel="Modal"

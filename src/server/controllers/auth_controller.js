@@ -4,6 +4,7 @@ import moment from 'moment'
 import User from '../models/user'
 import mailgun from '../services/mailgun'
 import { SECRET, APP_NAME } from '../../shared/config'
+import { logger } from '../services/logger'
 
 function tokenForUser(user) {
   const payload = {
@@ -12,7 +13,12 @@ function tokenForUser(user) {
     iat: moment().unix(),
     exp: moment().add(7, 'days').unix()
   }
-  return jwt.sign(payload, SECRET)
+  return jwt.sign(payload, SECRET, (err, token) => {
+    if (err) {
+      logger.error(`Error tokenForUser: ${err}`)
+    }
+    return token
+  })
 }
 
 exports.signin = (req, res) => {
@@ -25,6 +31,7 @@ exports.signin = (req, res) => {
       lastName: req.user.profile.lastName
     }
   }
+  logger.info(`Success signin : ${req.user.email}`)
   res.status(200).json({
     token: tokenForUser(req.user),
     primaryinfo: primaryInfo
@@ -35,6 +42,7 @@ exports.resetPassword = (req, res) => {
    // eslint-disable-next-line
   User.findOne({ resetPasswordToken: req.body.token, resetPasswordExpires: { $gt: Date.now() } }, (err, resetUser) => {
     if (err) {
+      logger.error(`Error resetPassword DB FindOne: ${err}`)
       return res.status(422).send({ error: 'Oops! There was an issue finding that user. Try again later or contact support' })
     }
     if (!resetUser) {
@@ -46,6 +54,7 @@ exports.resetPassword = (req, res) => {
 
     return resetUser.save((resetErr) => {
       if (resetErr) {
+        logger.error(`Error resetPassword DB Save: ${resetErr}`)
         return res.send(422).json({ error: 'Error saving user' })
       }
 
@@ -55,12 +64,14 @@ exports.resetPassword = (req, res) => {
           'If you did not request this change, please contact us immediately'
       }
       return mailgun.sendEmail(resetUser.email, message)
-        .then(() =>
+        .then((mailgunResp) => {
+          logger.info(`Success resetPassword Mailgun: ${mailgunResp}`)
           res.status(200).json({ success: 'Password successfully changed. Please login with your new password.' })
-        )
-        .catch(() =>
+        })
+        .catch((mailgunErr) => {
+          logger.error(`Error resetPassword Mailgun: ${mailgunErr}`)
           res.status(422).json({ error: 'Oops something went wrong dispatching to your email.  Please contact support' })
-        )
+        })
     })
   })
 }
@@ -69,11 +80,13 @@ exports.forgotPassword = (req, res) => {
   const email = req.body.email
   User.findOne({ email }, (err, existingUser) => {
     if (err || existingUser == null) {
+      logger.error(`Error forgotPassword findOne: ${err}`)
       return res.status(422).json({ error: 'Oops! We couldn\'t find that user!' })
     }
     return crypto.randomBytes(48, (cryptoErr, buffer) => {
       const resetToken = buffer.toString('hex')
       if (cryptoErr) {
+        logger.error(`Error forgotPassword Crypto: ${cryptoErr}`)
         return res.send(422).json({ error: 'Oops! Something went wrong generating a token! Please contact support' })
       }
 
@@ -82,6 +95,7 @@ exports.forgotPassword = (req, res) => {
 
       return existingUser.save((UserSaveErr) => {
         if (UserSaveErr) {
+          logger.error(`Success forgotPassword DB Save: ${UserSaveErr}`)
           return res.send(422).json({ error: 'Error saving your user token. Please contact support' })
         }
         const message = {
@@ -92,12 +106,14 @@ exports.forgotPassword = (req, res) => {
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
         }
         return mailgun.sendEmail(existingUser.email, message)
-          .then(() =>
+          .then((mailgunResp) => {
+            logger.info(`Success forgotPassword Mailgun: ${mailgunResp}`)
             res.status(200).json({ success: 'Please check your email for the link to reset your password.' })
-          )
-          .catch(() =>
+          })
+          .catch((mailgunErr) => {
+            logger.error(`Error forgotPassword Mailgun: ${mailgunErr}`)
             res.status(422).json({ error: 'Oops something went wrong dispatching to your email.  Please contact support' })
-          )
+          })
       })
     })
   })
@@ -109,15 +125,16 @@ exports.updateProfile = (req, res) => {
   if (!firstName || !lastName) {
     return res.status(422).json({ error: 'Please provide a first and last name' })
   }
-
   return User.findById(req.user.id, (err, user) => {
     if (err || user === null) {
+      logger.error(`Error updateProfile DB FindOne: ${err}`)
       return res.status(422).json({ error: 'An error occurred finding that user' })
     }
     user.profile.firstName = firstName
     user.profile.lastName = lastName
     return user.save((saveErr) => {
       if (saveErr) {
+        logger.error(`Error updateProfile DB Save: ${saveErr}`)
         return res.status(422).json({ error: 'An error occured saving your profile' })
       }
       const primaryInfo = {
@@ -145,6 +162,7 @@ exports.signup = (req, res, next) => {
 
   return User.findOne({ email }, (err, existingUser) => {
     if (err) {
+      logger.error(`Error signup DB FindOne: ${err}`)
       return next(err)
     }
     if (existingUser) {
@@ -156,7 +174,8 @@ exports.signup = (req, res, next) => {
       profile: { firstName, lastName }
     })
     return user.save((saveErr, savedUser) => {
-      if (err) {
+      if (saveErr) {
+        logger.error(`Error signup DB Save: ${saveErr}`)
         return next(saveErr)
       }
       const message = { subject: `Welcome to ${APP_NAME}!`, text: 'Thanks for signing up!' }
@@ -167,18 +186,15 @@ exports.signup = (req, res, next) => {
             token: tokenForUser(savedUser),
             primaryinfo: savedUser
           })
-          // eslint-disable-next-line
-          console.log('MailGun Output: ', response)
-          // handle success email
+          logger.info(`Success signup Mailgun: ${response}`)
         })
-          // eslint-disable-next-line
         .catch((mailGunErr) => {
           // eslint-disable-next-line
-          console.log('Mailgun failure: ', mailGunErr)
+          logger.error(`Error signup Mailgun: ${mailGunErr}`)
           return res.status(422).json({
-            info: 'Signed up! But there was an issue with your email.  Please double check your inbox' })
+            error: 'Signed up! But there was an issue with your email.  We\'ll send a confirmation again soon.' })
         })
-
+      // if no mailgun, uncomment and delete 165-179 if no mailgun
       // res.status(201).json({
       //   token: tokenForUser(savedUser),
       //   primaryinfo: savedUser
